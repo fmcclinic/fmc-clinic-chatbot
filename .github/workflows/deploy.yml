@@ -5,19 +5,42 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Update credentials
+      - name: Debug directory
         run: |
+          pwd
+          ls -la
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+
+      - name: Create credentials
+        run: |
+          echo "Current directory contents:"
+          ls -la
+          echo "Creating config directory..."
           mkdir -p config
+          echo "Creating credentials.js..."
           echo "window.GITHUB_CONFIG = { token: '${{ secrets.FMC_GITHUB_TOKEN }}' };" > config/credentials.js
+          echo "Config directory contents:"
+          ls -la config/
+
+      - name: Build
+        run: |
+          echo "Checking if credentials.js exists:"
+          cat config/credentials.js
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
+          force_orphan: true
