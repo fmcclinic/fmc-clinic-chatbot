@@ -13,10 +13,11 @@ jobs:
 
       - name: Update credentials
         run: |
+          mkdir -p config
           echo "window.GITHUB_CONFIG = { token: '${{ secrets.FMC_GITHUB_TOKEN }}' };" > config/credentials.js
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages
-          folder: .
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
