@@ -1,26 +1,19 @@
 name: Deploy to GitHub Pages
-
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
 permissions:
   contents: write
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Setup
+      - name: Inject credentials
         run: |
-          cp -r * /tmp/build/ || :
-          echo "window.GITHUB_CONFIG = { token: '${{ secrets.FMC_GITHUB_TOKEN }}' };" > /tmp/build/config/credentials.js
-
+          sed -i '/<head>/a \    <script>window.GITHUB_CONFIG = { token: "${{ secrets.FMC_GITHUB_TOKEN }}" };</script>' chat.html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: /tmp/build
+          publish_dir: .
