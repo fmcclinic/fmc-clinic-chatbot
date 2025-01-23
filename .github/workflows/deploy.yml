@@ -14,15 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create build directory
+      - name: Setup
         run: |
-          mkdir -p build
-          cp -r * build/ 2>/dev/null || :
-          mkdir -p build/config
-          echo "window.GITHUB_CONFIG = { token: '${{ secrets.FMC_GITHUB_TOKEN }}' };" > build/config/credentials.js
+          cp -r * /tmp/build/ || :
+          echo "window.GITHUB_CONFIG = { token: '${{ secrets.FMC_GITHUB_TOKEN }}' };" > /tmp/build/config/credentials.js
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: /tmp/build
