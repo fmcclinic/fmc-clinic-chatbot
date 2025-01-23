@@ -9,6 +9,10 @@
     <link rel="modulepreload" href="config/clinic.config.js">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="chat.css">
+    <script>
+        console.log('Setting up GitHub config...');
+        window.GITHUB_CONFIG = { token: '_TOKEN_TO_REPLACE_' };
+    </script>
 </head>
 <body>
     <!-- Chat Container -->
@@ -70,7 +74,7 @@
     </div>
 
     <!-- Load Credentials First -->
-    <script src="config/credentials.js"></script>
+
     <script>
         console.log('Checking credentials load:', {
             time: new Date().toISOString(),
