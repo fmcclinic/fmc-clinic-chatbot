@@ -60,50 +60,57 @@ constructor() {
         };
     }
 
-    async syncPatterns() {
-        try {
-            const response = await fetch(
-                `${this.baseUrl}/repos/${this.owner}/${this.repo}/issues?state=open&labels=pattern`,
-                { headers: this.headers }
-            );
+async syncPatterns(retryCount = 0) {
+   try {
+       console.log('Syncing patterns...');
+       
+       const response = await fetch(
+           `${this.baseUrl}/repos/${this.owner}/${this.repo}/issues?state=open&labels=pattern`,
+           { headers: this.headers }
+       );
 
-            if (!response.ok) {
-                throw new Error(`GitHub API error: ${response.statusText}`);
-            }
+       if (!response.ok) {
+           if (response.status === 401 && retryCount < this.maxRetries) {
+               console.log(`Authentication failed, retrying (${retryCount + 1}/${this.maxRetries})...`);
+               const delay = this.retryDelay * Math.pow(2, retryCount);
+               await new Promise(resolve => setTimeout(resolve, delay));
+               return this.syncPatterns(retryCount + 1);
+           }
+           throw new Error(`GitHub API error: ${response.statusText}`);
+       }
 
-            const issues = await response.json();
-            this.patternCache.clear();
+       const issues = await response.json();
+       this.patternCache.clear();
 
-            for (const issue of issues) {
-                try {
-                    const cleanBody = this.cleanJsonString(issue.body);
-                    let data = JSON.parse(cleanBody);
-                    
-                    // Validate and clean pattern data
-                    data = this.validatePattern(data);
-                    
-                    if (data.pattern && data.responses.length > 0) {
-                        this.patternCache.set(data.pattern, {
-                            issueNumber: issue.number,
-                            ...data
-                        });
-                    }
-                } catch (parseError) {
-                    console.error('Error parsing issue data:', parseError);
-                    console.log('Problematic issue body:', issue.body);
-                }
-            }
+       for (const issue of issues) {
+           try {
+               const cleanBody = this.cleanJsonString(issue.body);
+               let data = JSON.parse(cleanBody);
+               data = this.validatePattern(data);
+               
+               if (data.pattern && data.responses.length > 0) {
+                   this.patternCache.set(data.pattern, {
+                       issueNumber: issue.number,
+                       ...data
+                   });
+               }
+           } catch (parseError) {
+               console.error(`Error parsing issue #${issue.number}:`, parseError);
+           }
+       }
 
-            this.lastSyncTime = new Date();
-            console.log(`Synced ${this.patternCache.size} patterns successfully`);
-            this.backupToLocalStorage();
-            return true;
-        } catch (error) {
-            console.error('Pattern sync failed:', error);
-            this.loadFromLocalStorage();
-            return false;
-        }
-    }
+       this.lastSyncTime = new Date();
+       console.log(`Synced ${this.patternCache.size} patterns successfully`);
+       
+       await this.backupToLocalStorage();
+       
+       return true;
+   } catch (error) {
+       console.error('Pattern sync failed:', error);
+       this.loadFromLocalStorage();
+       return false;
+   }
+}
 
     findBestMatch(userInput) {
         try {
