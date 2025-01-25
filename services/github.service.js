@@ -6,21 +6,28 @@ import { storageManager } from '../utils/storage.utils.js';
 
 class GitHubService {
 constructor() {
+    this.maxRetries = 3;
+    this.retryDelay = 1000;
+    
+    // Config
     this.token = '';
     this.owner = 'fmcclinic';
     this.repo = 'fmc-chatbot-learning';
     this.baseUrl = 'https://api.github.com';
     this.patternCache = new Map();
-
+    this.lastSyncTime = null;
+    
+    // Headers 
     this.headers = {
-        'Authorization': `token ${this.token}`,
+        'Authorization': `Bearer ${this.token}`, // Thay đổi từ 'token' sang 'Bearer'
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json'
     };
-
-    console.log('Init with:', {
-        tokenStart: this.token.substring(0,4),
-        repo: `${this.owner}/${this.repo}`
+    
+    // Debug
+    console.log('Service config:', {
+        token_prefix: this.token.substring(0, 4),
+        url: `${this.baseUrl}/repos/${this.owner}/${this.repo}`
     });
 }
 
