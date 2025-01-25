@@ -3,12 +3,21 @@
 <html lang="vi">
 <head>
 
-<script>
-        console.log('Initial config check:', {
-            token: window.GITHUB_CONFIG?.token,
-            exists: !!window.GITHUB_CONFIG
-        });
-    </script>
+<script id="github-config">
+    const initConfig = () => {
+        try {
+            console.log('Starting config init...');
+            window.GITHUB_CONFIG = {token: 'TOKEN_PLACEHOLDER'};
+            console.log('Config after init:', {
+                exists: !!window.GITHUB_CONFIG,
+                token: window.GITHUB_CONFIG?.token
+            });
+        } catch(e) {
+            console.error('Config init error:', e);
+        }
+    };
+    initConfig();
+</script>
 
     
     <meta charset="UTF-8">
