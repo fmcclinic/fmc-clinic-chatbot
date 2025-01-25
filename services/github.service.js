@@ -6,7 +6,7 @@ import { storageManager } from '../utils/storage.utils.js';
 
 class GitHubService {
    constructor() {
-       this.token = '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';
+       this.token = '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';
        this.owner = 'fmcclinic';
        this.repo = 'fmc-chatbot-learning';
        this.baseUrl = 'https://api.github.com';
