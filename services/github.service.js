@@ -6,28 +6,21 @@ import { storageManager } from '../utils/storage.utils.js';
 
 class GitHubService {
 constructor() {
-    const token = 'TOKEN_PLACEHOLDER';
-    if (!token || token === 'TOKEN_PLACEHOLDER') {
-        console.error('Invalid token:', token);
-    }
-    
-    this.token = token;
+    this.token = 'TOKEN_PLACEHOLDER';
     this.owner = 'fmcclinic';
     this.repo = 'fmc-chatbot-learning';
     this.baseUrl = 'https://api.github.com';
     this.patternCache = new Map();
-    this.lastSyncTime = null;
-    
+
     this.headers = {
-        'Authorization': `token ${token}`,
+        'Authorization': `token ${this.token}`,
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json'
     };
 
-    console.log('Service initialized with:', {
-        token: token ? `${token.substring(0,4)}...` : 'missing',
-        owner: this.owner,
-        repo: this.repo
+    console.log('Init with:', {
+        tokenStart: this.token.substring(0,4),
+        repo: `${this.owner}/${this.repo}`
     });
 }
 
