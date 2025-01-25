@@ -5,15 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FMC Chat Widget</title>
-    
+        <!-- GitHub Config PHẢI ở đầu tiên -->
+    <script>
+        console.log('Initializing GitHub config...');
+        window.GITHUB_CONFIG = {token: 'TOKEN_PLACEHOLDER'};
+        console.log('Config status:', {
+            exists: !!window.GITHUB_CONFIG,
+            token: window.GITHUB_CONFIG?.token
+        });
+    </script>
     <!-- Styles -->
     <link rel="modulepreload" href="config/clinic.config.js">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="chat.css">
-    <script>
-        console.log('Setting up GitHub config...');
-        window.GITHUB_CONFIG = { token: '_TOKEN_TO_REPLACE_' };
-    </script>
+
 </head>
 <body>
     <!-- Chat Container -->
