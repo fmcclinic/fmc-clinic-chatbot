@@ -5,23 +5,28 @@ import { normalizeText, calculateStringSimilarity } from '../utils/chat.utils.js
 import { storageManager } from '../utils/storage.utils.js';
 
 class GitHubService {
-   constructor() {
-       this.token = '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';
-       this.owner = 'fmcclinic';
-       this.repo = 'fmc-chatbot-learning';
-       this.baseUrl = 'https://api.github.com';
-       this.patternCache = new Map();
-       this.lastSyncTime = null;
-       
-       this.headers = {
-           'Authorization': `token ${this.token}`,
-           'Accept': 'application/vnd.github.v3+json',
-           'Content-Type': 'application/json'
-       };
-
-       console.log('GitHubService initialized with token:', 
-           this.token ? this.token.substring(0, 10) + '...' : 'missing');
-   }
+constructor() {
+   const token = 'TOKEN_PLACEHOLDER';
+   if (!token) throw new Error('GitHub token is required');
+   
+   this.token = token;
+   this.owner = 'fmcclinic';
+   this.repo = 'fmc-chatbot-learning';
+   this.baseUrl = 'https://api.github.com';
+   this.patternCache = new Map();
+   this.lastSyncTime = null;
+   
+   this.headers = {
+       'Authorization': `token ${token}`,
+       'Accept': 'application/vnd.github.v3+json',
+       'Content-Type': 'application/json'
+   };
+   
+   console.log('GitHubService initialized:', {
+       token: token.substring(0, 10) + '...',
+       repo: this.repo
+   });
+}
 
 
 
