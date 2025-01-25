@@ -1,24 +1,27 @@
 name: Deploy to GitHub Pages
 on:
-  push:
-    branches: [main]
+ push:
+   branches: [main]
 permissions:
-  contents: write
+ contents: write
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Debug token
-        env:
-          FMC_GITHUB_TOKEN: ${{ secrets.FMC_GITHUB_TOKEN }}
-        run: |
-          echo "Token exists: ${{ secrets.FMC_GITHUB_TOKEN != '' }}"
-      - name: Inject token
-        run: |
-          sed -i "s|TOKEN_PLACEHOLDER|${{ secrets.FMC_GITHUB_TOKEN }}|g" services/github.service.js
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+ deploy:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v2
+     
+     - name: Debug token details
+       run: |
+         TOKEN="${{ secrets.FMC_GITHUB_TOKEN }}"
+         echo "Token length: ${#TOKEN}"
+         echo "Token starts with: ${TOKEN:0:4}..."
+     
+     - name: Inject token
+       run: |
+         sed -i "s|TOKEN_PLACEHOLDER|${{ secrets.FMC_GITHUB_TOKEN }}|g" services/github.service.js
+         
+     - name: Deploy
+       uses: peaceiris/actions-gh-pages@v3
+       with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         publish_dir: .
