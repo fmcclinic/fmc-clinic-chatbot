@@ -5,32 +5,23 @@ import { normalizeText, calculateStringSimilarity } from '../utils/chat.utils.js
 import { storageManager } from '../utils/storage.utils.js';
 
 class GitHubService {
-    constructor() {
-        // Debug line để kiểm tra
-        console.log('GITHUB_CONFIG status:', {
-            exists: !!window.GITHUB_CONFIG,
-            token: window.GITHUB_CONFIG?.token?.substring(0, 10) + '...'
-        });
+   constructor() {
+       this.token = '';
+       this.owner = 'fmcclinic';
+       this.repo = 'fmc-chatbot-learning';
+       this.baseUrl = 'https://api.github.com';
+       this.patternCache = new Map();
+       this.lastSyncTime = null;
+       
+       this.headers = {
+           'Authorization': `token ${this.token}`,
+           'Accept': 'application/vnd.github.v3+json',
+           'Content-Type': 'application/json'
+       };
 
-        // Lấy token từ config
-        this.token = window.GITHUB_CONFIG?.token;
-        if (!this.token) {
-            console.error('GitHub token not found in config');
-        }
-
-        this.owner = 'fmcclinic';
-        this.repo = 'fmc-chatbot-learning';
-        this.baseUrl = 'https://api.github.com';
-        this.patternCache = new Map();
-        this.lastSyncTime = null;
-
-        // Khởi tạo headers với token từ config
-        this.headers = {
-            'Authorization': `token ${this.token}`,
-            'Accept': 'application/vnd.github.v3+json',
-            'Content-Type': 'application/json'
-        };
-    }
+       console.log('GitHubService initialized with token:', 
+           this.token ? this.token.substring(0, 10) + '...' : 'missing');
+   }
 
 
 
