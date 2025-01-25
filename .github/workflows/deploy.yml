@@ -1,31 +1,31 @@
 name: Deploy to GitHub Pages
 
 on:
- push:
-   branches: [main]
+  push:
+    branches: [main]
 
 permissions:
- contents: write
+  contents: write
 
 jobs:
- deploy:
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v2
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-     - name: Inject token
-       run: |
-         echo "Checking chat.html before injection:"
-         grep "TOKEN_PLACEHOLDER" chat.html
-         
-         echo "Injecting token..."
-         sed -i "s/TOKEN_PLACEHOLDER/${{ secrets.FMC_GITHUB_TOKEN }}/g" chat.html
-         
-         echo "Verifying injection:"
-         grep "window.GITHUB_CONFIG" chat.html
+      - name: Inject token
+        run: |
+          echo "Content of chat.html before:"
+          cat chat.html
+          
+          echo "Injecting token..."
+          sed -i "s|TOKEN_PLACEHOLDER|${{ secrets.FMC_GITHUB_TOKEN }}|g" chat.html
+          
+          echo "Content after injection:"
+          cat chat.html
 
-     - name: Deploy
-       uses: peaceiris/actions-gh-pages@v3
-       with:
-         github_token: ${{ secrets.GITHUB_TOKEN }}
-         publish_dir: .
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
