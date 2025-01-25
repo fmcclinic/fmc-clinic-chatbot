@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>GitHub Token Test</title>
+   <script>
+       window.GITHUB_CONFIG = { 
+           token: 'TOKEN_PLACEHOLDER'
+       };
+   </script>
+</head>
+<body>
+   <h2>GitHub API Test</h2>
+   <div id="result"></div>
+
+   <script>
+       async function testGitHubAPI() {
+           const token = window.GITHUB_CONFIG.token;
+           const url = 'https://api.github.com/repos/fmcclinic/fmc-chatbot-learning/issues';
+           
+           try {
+               const response = await fetch(url, {
+                   headers: {
+                       'Authorization': `Bearer ${token}`,
+                       'Accept': 'application/vnd.github.v3+json'
+                   }
+               });
+               
+               document.getElementById('result').innerHTML = 
+                   `Status: ${response.status}<br>
+                    Token: ${token.substring(0,4)}...<br>
+                    Response: ${await response.text()}`;
+           } catch (error) {
+               document.getElementById('result').innerHTML = `Error: ${error}`;
+           }
+       }
+
+       testGitHubAPI();
+   </script>
+</body>
+</html>
