@@ -6,7 +6,8 @@ import { storageManager } from '../utils/storage.utils.js';
 
 class GitHubService {
     constructor() {
-        const token = '';
+
+        this.token = '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';
         if (!token) throw new Error('GitHub token is required');
         
         this.token = token;
