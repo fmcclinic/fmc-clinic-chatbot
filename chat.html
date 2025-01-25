@@ -5,15 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FMC Chat Widget</title>
-        <!-- GitHub Config PHẢI ở đầu tiên -->
-<!-- Trong chat.html -->
 <script id="github-config">
-    try {
-        window.GITHUB_CONFIG = {token: 'TOKEN_PLACEHOLDER'};
-        document.getElementById('github-config').dataset.initialized = 'true';
-    } catch(e) {
-        console.error('Config init error:', e);
-    }
+    const initConfig = () => {
+        try {
+            console.log('Starting config init...');
+            window.GITHUB_CONFIG = {token: 'TOKEN_PLACEHOLDER'};
+            console.log('Config after init:', {
+                exists: !!window.GITHUB_CONFIG,
+                token: window.GITHUB_CONFIG?.token
+            });
+        } catch(e) {
+            console.error('Config init error:', e);
+        }
+    };
+    initConfig();
 </script>
     <!-- Styles -->
     <link rel="modulepreload" href="config/clinic.config.js">
